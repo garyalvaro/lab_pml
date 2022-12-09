@@ -1,0 +1,17 @@
+# contoh hasil preprocessing-tokenizing
+n = 100
+cth = processed_docs_train['teks'][n]
+cth_lower = processed_docs_train['lower'][n]
+cth_punctual = processed_docs_train['punctual'][n]
+cth_normalize = processed_docs_train['normalize'][n]
+cth_stemmed = processed_docs_train['stemmed'][n]
+
+
+output = {
+    'cth':cth, 
+    'cth_lower':cth_lower, 
+    'cth_punctual':cth_punctual, 
+    'cth_normalize':cth_normalize,
+    'cth_stemmed':cth_stemmed, 
+    'cth_tokenized':cth_tokenized
+}
