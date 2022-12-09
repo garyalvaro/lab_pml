@@ -1,0 +1,17 @@
+from flask import Flask, render_template, request, jsonify
+import models as ml
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template('template.html')
+    
+if __name__ == '__main__':
+    app.run(debug=TRUE)
+
+
+
+
+Buka dari browser pakai link ini
+localhost:5000

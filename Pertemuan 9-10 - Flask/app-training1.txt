@@ -1,17 +1,30 @@
-# contoh hasil preprocessing-tokenizing
-n = 100
-cth = processed_docs_train['teks'][n]
-cth_lower = processed_docs_train['lower'][n]
-cth_punctual = processed_docs_train['punctual'][n]
-cth_normalize = processed_docs_train['normalize'][n]
-cth_stemmed = processed_docs_train['stemmed'][n]
+@app.route('/training', methods=['POST','GET'])
+def training():
+    if request.method=="POST":
+        file = request.files['file_train']
 
+        #read_data
+        raw_docs_train, raw_docs_val = ml.read_data(file)
 
-output = {
-    'cth':cth, 
-    'cth_lower':cth_lower, 
-    'cth_punctual':cth_punctual, 
-    'cth_normalize':cth_normalize,
-    'cth_stemmed':cth_stemmed, 
-    'cth_tokenized':cth_tokenized
-}
+        #preprocessing
+        processed_docs_train = ml.preprocessing(raw_docs_train)
+        processed_docs_val = ml.preprocessing(raw_docs_val)
+
+        # contoh hasil preprocessing-tokenizing
+        n = 100
+        cth = processed_docs_train['teks'][n]
+        cth_lower = processed_docs_train['lower'][n]
+        cth_punctual = processed_docs_train['punctual'][n]
+        cth_normalize = processed_docs_train['normalize'][n]
+        cth_stemmed = processed_docs_train['stemmed'][n]
+
+        output = {
+            'cth':cth, 
+            'cth_lower':cth_lower, 
+            'cth_punctual':cth_punctual, 
+            'cth_normalize':cth_normalize,
+            'cth_stemmed':cth_stemmed, 
+            'cth_tokenized':cth_tokenized
+        }
+        
+    return jsonify(output)
