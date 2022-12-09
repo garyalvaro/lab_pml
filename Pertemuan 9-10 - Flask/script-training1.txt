@@ -1,0 +1,21 @@
+$(function() {
+    console.log( "ready!" );
+});
+
+$('#train-form').on('submit',function(e){
+    e.preventDefault();
+    var file_train = new FormData($('#train-form')[0]);
+    $('.load-icon-train').show();
+    $.ajax({
+        data : file_train,
+        contentType: false,
+        cache: false,
+        processData: false,
+        // async: false,
+        type : 'post',
+        url : '/training',
+    })
+    .done(function(data){
+        
+    });
+});
