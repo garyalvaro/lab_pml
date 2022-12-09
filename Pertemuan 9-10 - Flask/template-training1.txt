@@ -1,0 +1,8 @@
+<form class="" method="post" enctype ="multipart/form-data" id="train-form">
+    <div class="form-group">
+        <span class="time">Masukkan file data training berformat CSV</span>
+        <input type="file" class="form-control" name="file_train" id="file_train" accept=".csv" required="required" data-error="File is required." style="cursor: pointer;">
+    </div>
+    <!-- Send Button -->
+    <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default">Submit</button>
+</form>
