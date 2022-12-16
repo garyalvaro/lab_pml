@@ -1,0 +1,11 @@
+loss_and_acc_train = model.evaluate(x, y, verbose=2)
+loss_train = round(loss_and_acc_train[0],2)
+accuracy_train = round(loss_and_acc_train[1],2)
+
+loss_and_acc_val = model.evaluate(x_val, y_val, verbose=2)
+loss_val = round(loss_and_acc_val[0],2)
+accuracy_val = round(loss_and_acc_val[1],2)
+
+clear_session()
+
+return loss_train, accuracy_train, loss_val, accuracy_val
