@@ -1,0 +1,20 @@
+@app.route('/testing', methods=['POST','GET'])
+def testing():
+	if request.method=="POST":
+		file = request.files['file_test']
+		df_hasil, accuracy = ml.model_testing(file)
+		data_output = []
+		for i in range (len(df_hasil)):
+			data_output.append({
+					'id': str(i+1),
+                    'teks': str(df_hasil['teks'][i]),
+                    'pengiriman': str(df_hasil['pengiriman'][i]),
+                    'pengiriman_pred': str(df_hasil['pengiriman_pred'][i]),
+                })
+		
+		output_test = {
+			'accuracy': round(accuracy*100, 2), 
+			'data_output':data_output
+		}
+
+		return jsonify(output_test)

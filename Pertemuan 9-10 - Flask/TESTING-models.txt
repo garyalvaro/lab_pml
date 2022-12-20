@@ -1,0 +1,42 @@
+def model_testing(file_test):
+    df = pd.read_csv(file_test) 
+    
+    # Encoding Categorical Data (Mengubah data kategorikal menjadi angka)
+    label_dict = {'negatif':0, 'positif':1, '-':99}
+    df['s_akurasi'] = df['s_akurasi'].replace(label_dict)
+    df['s_kualitas'] = df['s_kualitas'].replace(label_dict)
+    df['s_pelayanan'] = df['s_pelayanan'].replace(label_dict)
+    df['s_pengemasan'] = df['s_pengemasan'].replace(label_dict)
+    df['s_harga'] = df['s_harga'].replace(label_dict)
+    df['s_pengiriman'] = df['s_pengiriman'].replace(label_dict)    
+
+    # Preprocessing
+    df_testing = preprocessing(df)
+    # Tokenisasi
+    word_seq_test = tokenize_testing(df_testing)
+
+    # Mendefinisikan dataframe hasil
+    df_hasil = df_testing[['teks','pengiriman']]
+
+    # Pemanggilan Model
+    model = load_model("model/model_cnnlstm")
+    # Proses Prediksi/Testing
+    pred = model.predict(word_seq_test)
+    df_hasil['pengiriman_pred'] = (pred>0.5).astype('int32')
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_true=df_hasil['pengiriman'], y_pred=df_hasil['pengiriman_pred'])
+    plt.figure(figsize=(4,4))
+    ax= plt.subplot()
+    sns.heatmap(cm, annot=True, fmt='g') 
+    ax.set_xlabel('Predicted labels')
+    ax.set_ylabel('True labels')
+    ax.set_title('Confusion Matrix')
+    ax.xaxis.set_ticklabels(['bukan_pengiriman', 'pengiriman'])
+    ax.yaxis.set_ticklabels(['bukan_pengiriman', 'pengiriman'])
+    plt.savefig("static/hasil/cm.png")
+
+    # Akurasi
+    accuracy = accuracy_score(df_hasil['pengiriman'], df_hasil['pengiriman_pred'])
+
+    return df_hasil, accuracy
