@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link href="../static/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/jquery.dataTables.min.css"/>
+
+    <title>FLASK PROJECT</title>
+</head>
+<body>
+
+<div class="container py-4">
+    <header class="pb-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+            <img src="../static/logo.png" width="40" alt="" class="mx-3">
+            <h4>SIMPLE FLASK PROJECT by Gary Alvaro</h4>
+        </a>
+    </header>
+
+    <div class="my-5 p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5 my-5">
+            <h1 class="display-5 fw-bold mt-4">Analisis Sentimen Berbasis Aspek</h1>
+            <p class="col-md-8 fs-4">Terhadap Ulasan Produk Berbahasa Indonesia pada E-Commerce Menggunakan Kombinasi Algoritma Convolutional Neural Network & Long-Short Term Memory (CNN-LSTM)</p>
+            <a class="btn btn-primary btn-lg mt-4">Start</a>
+        </div>
+        <div class="py-5"></div>
+    </div>
+
+    <div class="h-100 p-5 mb-4 text-white bg-dark rounded-3" id="training">
+        <h2>Training</h2>
+        <form class="form-control bg-dark border-0" method="post" enctype ="multipart/form-data" id="train-form">
+            <span class="text-white">Masukkan file data training berformat CSV</span>
+            <input type="file" class="form-control mb-3" name="file_train" id="file_train" accept=".csv" required="required" style="cursor: pointer;">
+            <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div class="text-center load-icon-train" style="display: none;">
+        <img src="../static/loading.gif" width="20%" alt="">
+    </div>
+
+    <div class="h-100 p-5 mb-4 bg-light border rounded-3" id="preprocessing" style="display: none;">
+        <h2>Hasil Preprocessing</h2>
+        <table class="table mt-3">
+            <tr>
+                <th colspan="2">Input (Ulasan Produk)</th>
+                <td id="cth"></td>
+            </tr>
+            <tr>
+                <th>#1</th>
+                <th>Case Folding</th>
+                <td id="cth_lower"></td>
+            </tr>
+            <tr>
+                <th>#2</th>
+                <th>Pembersihan Data</th>
+                <td id="cth_punctual"></td>
+            </tr>
+            <tr>
+                <th>#3</th>
+                <th>Normalisasi Data</th>
+                <td id="cth_normalize"></td>
+            </tr>
+            <tr>
+                <th>#4</th>
+                <th>Stemming</th>
+                <td id="cth_stemmed"></td>
+            </tr>
+            <tr>
+                <th>#5</th>
+                <th>Tokenisasi</th>
+                <td id="cth_tokenized"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="row align-items-md-stretch" id="grafik" style="display: none;">
+        <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <h2 class="mb-3">Accuracy</h2>
+            <img src="" alt="Akurasi" id='img_accuracy' width="100%"><br>
+            Train Accuracy = <span id='accuracy_train'></span>% <br>
+            Train Validation = <span id='accuracy_val'></span>% <br>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <h2 class="mb-3">Loss</h2>
+            <img src="" alt="Loss" id='img_loss' width="100%"><br>
+            Loss Accuracy = <span id='loss_train'></span>% <br>
+            Loss Validation = <span id='loss_val'></span>% <br>
+        </div>
+        </div>
+    </div>
+
+
+
+    <div class="h-100 p-5 mt-5 mb-4 text-white bg-dark rounded-3" id="testing">
+        <h2>Testing</h2>
+        <form class="form-control bg-dark border-0" method="post" enctype ="multipart/form-data" id="test-form">
+            <span class="text-white">Masukkan file data testing berformat CSV</span>
+            <input type="file" class="form-control mb-3" name="file_test" id="file_test" accept=".csv" required="required" style="cursor: pointer;">
+            <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div class="text-center load-icon-test" style="display: none;">
+        <img src="../static/loading.gif" width="20%" alt="">
+    </div>
+
+    <div class="row align-items-md-stretch" id="hasil_testing" style="display: none;">
+        <div class="col-md-4">
+            <div class="p-3 mb-4 bg-light border rounded-3">
+                <h3 class="mb-3">Accuracy</h3>
+                <h1><span id='accuracy'></span>%</h1>
+            </div>
+            <div class="p-3 bg-light border rounded-3">
+                <h3 class="mb-3">Confusion Matrix</h3>
+                <img src="" alt="Confusion Matrix" id='img_cm' width="100%">
+            </div>
+        </div>
+        <div class="col-md-8">
+        <div class="h-100 p-5 bg-light border rounded-3">
+            <h2 class="mb-3">Hasil Testing</h2>
+            <table class="table" id="empTable">
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th width=50%>Review</th>
+                    <th>Aspek Pengiriman</th>
+                    <th>Aspek Pengiriman (pred)</th>
+                </tr>
+                </thead>
+                <tbody class="tr_pengiriman">
+                </tbody>
+            </table>   
+        </div>
+        </div>
+    </div>
+
+    <footer class="pt-3 mt-4 text-center text-muted border-top">
+        &copy; 2022 - Gary Alvaro
+    </footer>
+</div>
+
+<!-- JavaScripts -->
+<script src="../static/bootstrap.bundle.min.js"></script>
+<script src="../static/jquery.min.js"></script>
+<script type="text/javascript" src="../static/jquery.dataTables.min.js"></script>
+<script src="../static/script.js"></script>
+
+</body>
+</html>
